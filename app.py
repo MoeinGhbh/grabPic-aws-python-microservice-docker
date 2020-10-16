@@ -7,7 +7,6 @@ from flask import render_template
 
 # Astronomy Picture of the Day  &date=2017-07-04  would return a video
 my_nasa_apod_url = 'https://api.nasa.gov/planetary/apod?api_key={my_api_key}'
-
 app = Flask(__name__)
 
 @app.route('/')
@@ -37,8 +36,9 @@ def home():
 
 if __name__ == '__main__':
     ssm = boto3.client('ssm', region_name='us-east-1')
-    response = ssm.get_parameters(Names=['MY_NASA_API_KEY'],
+    response = ssm.get_parameters(Names=['MY-NASA-API-KEY'],
                                   WithDecryption=True)
+    print(response)
     nasa_api_key = response['Parameters'][0]['Value']
     my_nasa_apod_url = my_nasa_apod_url.format(my_api_key=nasa_api_key)
     app.run(host='0.0.0.0', debug=True)
